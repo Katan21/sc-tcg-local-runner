@@ -1,0 +1,603 @@
+/* =========================================================
+   SC-TCG  ·  v2 ARAYUZ TEMASI  ("AMBER HUD")
+   Orijinal dosyalara (index.html, pack.js, pack.css, style.css,
+   card.js, i18n.js) HIC dokunmaz. Sadece uzerine yazan katmandir.
+   Kapatmak icin: /v2/ yerine /  ya da sag altaki seciciden "v1".
+   YON: koyu grafit zemin + amber vurgu, sol menu ustte yatay
+   chip menu oldu, paneller yumusak koseli, nadirlik renkleri korundu.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap');
+
+:root {
+  --v2: #ffb020;
+  --v2-2: #ffd166;
+  --v2-dim: #a8761d;
+  --v2-ink: #0a0d12;
+  --v2-text: #eef2f7;
+  --v2-muted: #93a1b3;
+  --v2-panel: rgba(21, 27, 36, .86);
+  --v2-panel-2: rgba(28, 36, 48, .92);
+  --v2-line: rgba(255, 176, 32, .24);
+  --v2-line-soft: rgba(147, 161, 179, .16);
+  --v2-ok: #3ddc97;
+  --v2-bad: #ff5f6d;
+  --v2-font: 'Chakra Petch', 'Rajdhani', 'Segoe UI', sans-serif;
+  --v2-font2: 'Barlow Condensed', 'Rajdhani', 'Segoe UI', sans-serif;
+  --v2-r: 14px;
+}
+
+/* ---------------- 1. TEMEL / FONTE / SKROLLBAR ---------------- */
+
+html { scrollbar-color: rgba(255,176,32,.45) rgba(10,13,18,.85) !important; }
+
+body {
+  background: #080b10 !important;
+  font-family: var(--v2-font) !important;
+  color: var(--v2-text) !important;
+}
+body::before {
+  background:
+    radial-gradient(1100px 620px at 78% -8%, rgba(255,176,32,.13), transparent 60%),
+    radial-gradient(900px 520px at 6% 4%, rgba(61,220,151,.07), transparent 62%),
+    linear-gradient(180deg, #0d1218 0%, #080b10 46%, #06090d 100%) !important;
+}
+::-webkit-scrollbar { width: 10px !important; height: 10px !important; }
+::-webkit-scrollbar-track { background: rgba(10,13,18,.85) !important; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255,176,32,.55), rgba(255,176,32,.28)) !important;
+  border-radius: 8px !important;
+  border: 2px solid rgba(10,13,18,.9) !important;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--v2) !important; }
+::selection { background: rgba(255,176,32,.32) !important; color: #fff !important; }
+
+.brand-title, .brand-sub, .tab-title, .sub-heading, .panel-tag,
+.view h1, .view h2, .view h3 {
+  font-family: var(--v2-font) !important;
+}
+.view, .view p, .view li, .view span, .view div { font-family: var(--v2-font2) !important; }
+.view h1, .view h2, .view h3, .tab-title, .sub-heading, .brand-title { font-family: var(--v2-font) !important; }
+
+/* ---------------- 2. TOPBAR + v2 NAV BAR ---------------- */
+
+.topbar {
+  background: rgba(10, 13, 18, .92) !important;
+  border-bottom: 1px solid var(--v2-line) !important;
+  height: 60px !important; min-height: 60px !important; max-height: 60px !important;
+  padding: 0 22px !important;
+}
+.brand-diamond { color: var(--v2) !important; text-shadow: 0 0 16px var(--v2) !important; }
+.brand-title { color: #fff !important; letter-spacing: .26em !important; }
+.brand-sub { color: var(--v2-dim) !important; letter-spacing: .22em !important; }
+
+.stat-pill {
+  background: rgba(255,255,255,.045) !important;
+  border: 1px solid var(--v2-line-soft) !important;
+  border-radius: 999px !important;
+  color: var(--v2-muted) !important;
+  font-family: var(--v2-font) !important;
+}
+.stat-pill strong { color: var(--v2-2) !important; }
+
+.auth-btn {
+  border-radius: 999px !important;
+  font-family: var(--v2-font) !important;
+  letter-spacing: .1em !important;
+}
+
+/* v2 yatay nav (v2.js enjekte eder) */
+#v2Navbar {
+  position: sticky; top: 60px; z-index: 39;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 22px;
+  background: rgba(8,11,16,.94);
+  border-bottom: 1px solid var(--v2-line);
+  backdrop-filter: blur(14px);
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none;
+}
+#v2Navbar::-webkit-scrollbar { display: none; }
+#v2NavToggle {
+  flex: 0 0 auto;
+  width: 40px; height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--v2-line);
+  background: rgba(255,176,32,.10);
+  color: var(--v2-2);
+  font-size: 17px; line-height: 1;
+  cursor: pointer;
+}
+#v2NavToggle:hover { background: rgba(255,176,32,.22); }
+.v2-chips { display: flex; align-items: center; gap: 8px; flex: 1 1 auto; }
+.v2-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: rgba(255,255,255,.05);
+  color: var(--v2-muted);
+  font-family: var(--v2-font) !important;
+  font-size: 11.5px; font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase;
+  white-space: nowrap; cursor: pointer;
+  transition: background .18s, color .18s, border-color .18s, transform .18s;
+}
+.v2-chip:hover { color: #fff; background: rgba(255,176,32,.14); border-color: var(--v2-line); }
+.v2-chip.is-active {
+  color: var(--v2-ink);
+  background: linear-gradient(135deg, var(--v2-2), var(--v2));
+  border-color: var(--v2-2);
+  box-shadow: 0 4px 18px rgba(255,176,32,.35);
+}
+.v2-chip .v2-chip-ic { font-size: 13px; }
+.v2-chip .v2-chip-n {
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 999px;
+  background: rgba(255,255,255,.12);
+  color: var(--v2-2);
+}
+.v2-chip.is-active .v2-chip-n { background: rgba(10,13,18,.22); color: var(--v2-ink); }
+.v2-chip[hidden] { display: none; }
+
+/* ---------------- 3. SIDEBAR -> SOL RAIL ---------------- */
+
+html.v2 .app-sidebar {
+  width: 214px !important; min-width: 214px !important; max-width: 214px !important;
+  background: rgba(10,13,18,.9) !important;
+  border-right: 1px solid var(--v2-line) !important;
+  box-shadow: 1px 0 0 rgba(0,0,0,.5) !important;
+  padding: 14px 10px !important;
+  gap: 10px !important;
+}
+html.v2 .sidebar-header { display: none !important; }
+html.v2 .sidebar-tabs { gap: 6px !important; }
+html.v2 .sidebar-tabs .tab {
+  padding: 9px 10px !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,.035) !important;
+  border: 1px solid transparent !important;
+  color: var(--v2-muted) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .07em !important;
+}
+html.v2 .sidebar-tabs .tab:hover {
+  background: rgba(255,176,32,.10) !important;
+  border-color: var(--v2-line) !important;
+  transform: none !important;
+}
+html.v2 .sidebar-tabs .tab.active {
+  background: linear-gradient(90deg, rgba(255,176,32,.26), rgba(255,176,32,.05)) !important;
+  border-color: var(--v2) !important;
+  border-left: 3px solid var(--v2) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+html.v2 .sidebar-tabs .tab.active .tab-icon { color: var(--v2) !important; text-shadow: 0 0 10px var(--v2) !important; }
+html.v2 .sidebar-tabs .tab.active .tab-counter {
+  background: rgba(255,176,32,.22) !important;
+  border-color: var(--v2) !important;
+  color: var(--v2-2) !important;
+  box-shadow: none !important;
+}
+html.v2 .sidebar-tabs .tab.dev-tab { border: 1px dashed var(--v2-dim) !important; }
+html.v2 .sidebar-footer {
+  border-top: 1px solid var(--v2-line-soft) !important;
+  color: var(--v2-muted) !important;
+}
+html.v2 .sys-dot { background: var(--v2-ok) !important; box-shadow: 0 0 8px var(--v2-ok) !important; }
+
+/* ---------------- 4. PANELLER / KARTLAR ---------------- */
+
+html.v2 .terminal-panel,
+html.v2 .panel-header,
+html.v2 .fleet-dashboard,
+html.v2 .stat-pill,
+html.v2 .route-loot-item,
+html.v2 .odds-chip,
+html.v2 .sc-modal,
+html.v2 .filter-btn,
+html.v2 .guarantee-pill,
+html.v2 .booster-tech-frame,
+html.v2 .bay-route-selector,
+html.v2 .bay-loot-preview,
+html.v2 .bm-dashboard,
+html.v2 .bm-item-card,
+html.v2 .qsa-card,
+html.v2 [class*="-card"],
+html.v2 [class*="-panel"],
+html.v2 [class*="-box"],
+html.v2 [class*="-tile"],
+html.v2 [class*="-slot"],
+html.v2 [class*="-item"] {
+  border-radius: var(--v2-r) !important;
+  border-color: var(--v2-line-soft) !important;
+  font-family: var(--v2-font2) !important;
+}
+html.v2 .terminal-panel,
+html.v2 .fleet-dashboard:not(.home-hero-banner),
+html.v2 .sc-modal,
+html.v2 [class*="-panel"]:not(.app-sidebar),
+html.v2 [class*="-box"] {
+  background: linear-gradient(180deg, var(--v2-panel-2), var(--v2-panel)) !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,.45) !important;
+}
+html.v2 .panel-tag,
+html.v2 .sub-heading {
+  color: var(--v2) !important;
+  letter-spacing: .2em !important;
+  font-weight: 700 !important;
+}
+html.v2 .dash-title, html.v2 .view h2, html.v2 .view h3 {
+  color: #fff !important;
+  text-shadow: none !important;
+}
+html.v2 .dash-sub, html.v2 .view p { color: var(--v2-muted) !important; }
+
+/* butonlar */
+html.v2 button, html.v2 .btn, html.v2 [class*="btn-"] {
+  font-family: var(--v2-font) !important;
+  letter-spacing: .07em !important;
+}
+html.v2 .btn-primary,
+html.v2 .btn-primary:hover {
+  background: linear-gradient(180deg, var(--v2-2), var(--v2)) !important;
+  border: 1px solid var(--v2-2) !important;
+  color: var(--v2-ink) !important;
+  box-shadow: 0 6px 22px rgba(255,176,32,.35) !important;
+  text-shadow: none !important;
+}
+html.v2 .btn-secondary,
+html.v2 .btn-secondary:hover {
+  background: rgba(255,176,32,.10) !important;
+  border: 1px solid var(--v2-line) !important;
+  color: var(--v2-2) !important;
+}
+html.v2 .guarantee-pill, html.v2 .bay-status-chip, html.v2 .bm-cooldown-badge {
+  border-radius: 999px !important;
+  font-family: var(--v2-font) !important;
+}
+
+/* form alanlari */
+html.v2 input, html.v2 textarea, html.v2 select {
+  border-radius: 10px !important;
+  border: 1px solid var(--v2-line-soft) !important;
+  background: rgba(255,255,255,.045) !important;
+  color: var(--v2-text) !important;
+  font-family: var(--v2-font2) !important;
+}
+html.v2 input:focus, html.v2 textarea:focus, html.v2 select:focus {
+  border-color: var(--v2) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255,176,32,.16) !important;
+}
+html.v2 progress, html.v2 progress::-webkit-progress-bar { background: rgba(255,255,255,.07) !important; }
+html.v2 progress::-webkit-progress-value { background: var(--v2) !important; }
+
+/* ---------------- 5. v2 KABUK: SOL RAY -> UST KOMUT BARIG ----------------
+   Sol sidebar DOM'da oldugu gibi kalir (JS'e dokunulmaz), sadece
+   CSS ile uste, yatay bir "command deck" barina cevrilir. */
+
+html.v2 .app-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: calc(100vh - 60px) !important;
+}
+html.v2 .app-sidebar {
+  order: -1;
+  width: 100% !important; min-width: 0 !important; max-width: none !important;
+  height: auto !important;
+  position: static !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px 14px !important;
+  padding: 10px 18px !important;
+  background: rgba(9,12,17,.94) !important;
+  border-right: none !important;
+  border-bottom: 1px solid var(--v2-line) !important;
+  box-shadow: 0 8px 26px rgba(0,0,0,.5) !important;
+  overflow: visible !important;
+}
+html.v2 .sidebar-header { display: none !important; }
+html.v2 .sidebar-tabs {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  flex: 1 1 auto !important;
+  width: auto !important;
+}
+html.v2 .sidebar-tabs .tab {
+  width: auto !important;
+  padding: 8px 12px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.04) !important;
+  border: 1px solid transparent !important;
+  color: var(--v2-muted) !important;
+  font-size: 10.5px !important;
+  letter-spacing: .1em !important;
+  justify-content: center !important;
+}
+html.v2 .sidebar-tabs .tab:hover {
+  color: #fff !important;
+  background: rgba(255,176,32,.13) !important;
+  border-color: var(--v2-line) !important;
+  transform: translateY(-1px) !important;
+}
+html.v2 .sidebar-tabs .tab.active {
+  color: var(--v2-ink) !important;
+  background: linear-gradient(135deg, var(--v2-2), var(--v2)) !important;
+  border: 1px solid var(--v2-2) !important;
+  border-left-width: 1px !important;
+  box-shadow: 0 4px 16px rgba(255,176,32,.34) !important;
+  transform: none !important;
+}
+html.v2 .sidebar-tabs .tab.active .tab-icon { color: var(--v2-ink) !important; text-shadow: none !important; }
+html.v2 .sidebar-tabs .tab.active .tab-counter {
+  background: rgba(10,13,18,.24) !important;
+  border-color: rgba(10,13,18,.3) !important;
+  color: var(--v2-ink) !important;
+  box-shadow: none !important;
+}
+html.v2 .sidebar-tabs .tab .tab-main { gap: 7px !important; }
+html.v2 .sidebar-tabs .tab .tab-icon { font-size: 13px !important; }
+html.v2 .sidebar-tabs .tab .tab-title { font-size: inherit !important; }
+html.v2 .sidebar-tab-divider { display: none !important; }
+html.v2 .sidebar-tabs .tab.dev-tab { border: 1px dashed var(--v2-dim) !important; }
+
+html.v2 .sensor-net-box,
+html.v2 .sidebar-radio-widget {
+  width: auto !important;
+  max-width: 330px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--v2-line-soft) !important;
+  background: rgba(255,255,255,.04) !important;
+  padding: 7px 10px !important;
+  font-family: var(--v2-font) !important;
+}
+html.v2 .sidebar-footer {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 14px !important;
+  border-top: none !important;
+  color: var(--v2-muted) !important;
+  font-size: 10px !important;
+}
+html.v2 .sys-dot { background: var(--v2-ok) !important; box-shadow: 0 0 9px var(--v2-ok) !important; }
+html.v2 .app-main-content { padding: 18px 22px 60px !important; max-width: 1500px; margin: 0 auto; }
+
+/* dar ekranlarda ust bar alt alta dizilir, ikon rayina donmez */
+@media (max-width: 900px) {
+  html.v2 .app-sidebar { padding: 8px 10px !important; }
+  html.v2 .sidebar-tabs .tab .tab-title { display: inline !important; }
+  html.v2 .sidebar-header { display: none !important; }
+  html.v2 .sensor-net-box { display: none !important; }
+  html.v2 .sidebar-radio-widget { max-width: none !important; flex: 1 1 100% !important; }
+}
+
+/* ---------------- 6. KART YENI GORUNUM (nadirlik renkleri kalmali) ---------------- */
+
+html.v2 .face.front {
+  border-radius: 16px !important;
+  border-width: 1.5px !important;
+  background:
+    linear-gradient(160deg, rgba(255,255,255,.05), transparent 40%),
+    linear-gradient(160deg, #262e39 0%, #161c24 45%, #0c1016 100%) !important;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.85) inset,
+    0 0 var(--glow, 14px) var(--rarity-soft, rgba(255,176,32,.2)),
+    0 18px 42px rgba(0,0,0,.6) !important;
+}
+html.v2 .face.front::before { display: none !important; }
+html.v2 .front .name { font-family: var(--v2-font) !important; letter-spacing: .03em !important; }
+html.v2 .front .badge {
+  clip-path: none !important;
+  border-radius: 10px !important;
+  background: linear-gradient(160deg, rgba(255,176,32,.25), rgba(255,176,32,.06)) !important;
+  border: 1px solid var(--v2-line) !important;
+  color: var(--v2-2) !important;
+}
+html.v2 .front .gem { box-shadow: 0 0 12px rgba(0,0,0,.55) !important; }
+html.v2 .front .stats div {
+  border-radius: 9px !important;
+  background: rgba(255,255,255,.045) !important;
+  border: 1px solid var(--v2-line-soft) !important;
+}
+html.v2 .front .footer, html.v2 .front .series-line { font-family: var(--v2-font) !important; letter-spacing: .12em !important; }
+html.v2 .card-wrapper { border-radius: 16px; }
+
+/* booster (pack acma) cercevesi de amber'a uyum saglasin */
+html.v2 .booster-wrapper, html.v2 .booster-top, html.v2 .booster-tech-frame { border-radius: 18px !important; }
+
+/* ---------------- 7. TEMA SECICI (sag alt) ---------------- */
+
+#v2Switch {
+  position: fixed; right: 16px; bottom: 16px; z-index: 2147483000;
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 8px 7px 12px;
+  border-radius: 999px;
+  background: rgba(9,12,17,.92);
+  border: 1px solid var(--v2-line);
+  box-shadow: 0 10px 30px rgba(0,0,0,.55);
+  backdrop-filter: blur(12px);
+  font-family: var(--v2-font), 'Rajdhani', sans-serif;
+}
+#v2Switch .v2-sw-label {
+  font-size: 9.5px; letter-spacing: .22em; color: var(--v2-dim);
+  font-weight: 700; margin-right: 2px;
+}
+#v2Switch .v2-sw-btn {
+  padding: 6px 11px; border-radius: 999px; cursor: pointer;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .08em;
+  border: 1px solid transparent;
+  background: rgba(255,255,255,.05); color: #93a1b3;
+  font-family: inherit;
+}
+#v2Switch .v2-sw-btn:hover { color: #fff; background: rgba(255,176,32,.14); }
+#v2Switch .v2-sw-btn.is-on {
+  background: linear-gradient(135deg, #ffd166, #ffb020); color: #0a0d12;
+  border-color: #ffd166; box-shadow: 0 4px 14px rgba(255,176,32,.35);
+}
+#v2Switch .v2-sw-x {
+  width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgba(147,161,179,.25); background: none; color: #93a1b3;
+  font-size: 14px; line-height: 1; padding: 0;
+}
+#v2Switch .v2-sw-x:hover { color: #fff; border-color: #ffb020; }
+#v2Switch.v2-sw-min .v2-sw-label,
+#v2Switch.v2-sw-min .v2-sw-btn { display: none; }
+
+/* ---------------- 8. UST MENU: TEK SATIR + Sag blok ---------------- */
+
+html.v2 .sidebar-tabs {
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+  padding-bottom: 2px !important;
+  -webkit-mask-image: linear-gradient(90deg, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, #000 92%, transparent);
+}
+html.v2 .sidebar-tabs::-webkit-scrollbar { display: none; }
+html.v2 .sidebar-tabs .tab {
+  flex: 0 0 auto !important;
+  white-space: nowrap !important;
+}
+html.v2 .btn-feedback-tab { width: auto !important; max-width: none !important; }
+html.v2 .sidebar-tab-divider { display: none !important; }
+
+/* sag blok: sens + radyo + footer */
+html.v2 .sensor-net-box { flex: 0 0 auto !important; min-width: 168px !important; }
+html.v2 .sidebar-radio-widget { flex: 0 0 auto !important; width: 300px !important; }
+html.v2 .sidebar-footer { margin-left: auto !important; flex: 0 0 auto !important; white-space: nowrap; }
+html.v2 .sidebar-version-tag { flex-direction: row !important; gap: 8px !important; }
+
+/* basliklari Chakra Petch'e cevir (pack.css Orbitron !important veriyor) */
+html.v2 .dash-title,
+html.v2 .brand-title,
+html.v2 .view h1, html.v2 .view h2, html.v2 .view h3,
+html.v2 .panel-tag,
+html.v2 .sub-heading,
+html.v2 .tab-title,
+html.v2 .booster-brand-name,
+html.v2 .qsa-title,
+html.v2 [class*="-title"] {
+  font-family: var(--v2-font) !important;
+}
+html.v2 .dash-title, html.v2 .view h1 { letter-spacing: .01em !important; }
+
+/* ana hero banner: cyan gradyan -> amber kenar */
+html.v2 .home-hero-banner {
+  background: linear-gradient(120deg, rgba(255,176,32,.12) 0%, rgba(20,26,34,.92) 42%, rgba(12,16,22,.94) 100%) !important;
+  border: 1px solid var(--v2-line) !important;
+  border-left: 3px solid var(--v2) !important;
+  border-radius: var(--v2-r) !important;
+  box-shadow: 0 10px 34px rgba(0,0,0,.5) !important;
+}
+html.v2 .home-hero-banner .dash-title { color: #fff !important; text-shadow: none !important; }
+
+/* gelistirme uyarisi bandi amber */
+html.v2 .home-disclaimer-banner {
+  border-radius: var(--v2-r) !important;
+  border: 1px solid rgba(255,176,32,.34) !important;
+  background: linear-gradient(90deg, rgba(255,176,32,.11), rgba(255,176,32,.04)) !important;
+}
+html.v2 kbd {
+  font-family: var(--v2-font) !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--v2-line) !important;
+  background: rgba(10,13,18,.7) !important;
+  color: var(--v2-2) !important;
+}
+
+/* ---------------- 9. TOPBAR TASMA + KUCUK DOKUNUSLAR ---------------- */
+
+/* dar ekranda butonlar kesilmesin: kaydirilabilir olsun */
+html.v2 .topbar {
+  padding: 0 16px !important;
+  gap: 10px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+}
+html.v2 .topbar::-webkit-scrollbar { display: none; }
+html.v2 .topbar > * { flex: 0 0 auto !important; }
+html.v2 .auth-btn { white-space: nowrap !important; }
+
+/* dev sekmesi kompakt (menu icinde kocaman kutu olmasin) */
+html.v2 .sidebar-tabs .tab.dev-tab {
+  padding: 6px 10px !important;
+  font-size: 9.5px !important;
+  opacity: .8;
+}
+html.v2 .sidebar-tabs .tab.dev-tab .tab-main { gap: 5px !important; }
+html.v2 .sidebar-tabs .tab.dev-tab .tab-counter {
+  font-size: 9px !important; padding: 1px 6px !important;
+}
+
+/* radyo widget + sens kutusu icindeki cyan yazilar amber'a */
+html.v2 .mp-label,
+html.v2 .mp-head-row,
+html.v2 .sensor-net-header,
+html.v2 .mp-marquee {
+  color: var(--v2) !important;
+  text-shadow: none !important;
+  letter-spacing: .18em !important;
+  font-family: var(--v2-font) !important;
+}
+html.v2 .mp-track-box { color: var(--v2-text) !important; }
+html.v2 .mp-btn {
+  border-radius: 9px !important;
+  border: 1px solid var(--v2-line) !important;
+  background: rgba(255,176,32,.08) !important;
+  color: var(--v2-2) !important;
+}
+html.v2 .mp-btn:hover { background: rgba(255,176,32,.22) !important; color: #fff !important; }
+html.v2 .mp-btn.mp-play {
+  background: linear-gradient(135deg, var(--v2-2), var(--v2)) !important;
+  color: var(--v2-ink) !important;
+  border-color: var(--v2-2) !important;
+}
+html.v2 input[type="range"] { accent-color: var(--v2) !important; }
+html.v2 input[type="range"]::-webkit-slider-thumb { background: var(--v2) !important; }
+html.v2 .mp-eq span { background: var(--v2) !important; }
+
+/* secim listeleri / chip'ler */
+html.v2 .filter-btn {
+  border-radius: 999px !important;
+  border: 1px solid var(--v2-line-soft) !important;
+  background: rgba(255,255,255,.04) !important;
+  color: var(--v2-muted) !important;
+  font-family: var(--v2-font) !important;
+  letter-spacing: .08em !important;
+}
+html.v2 .filter-btn:hover { color: #fff !important; border-color: var(--v2-line) !important; }
+html.v2 .filter-btn.active,
+html.v2 .filter-btn.is-active {
+  background: linear-gradient(135deg, var(--v2-2), var(--v2)) !important;
+  color: var(--v2-ink) !important;
+  border-color: var(--v2-2) !important;
+}
+
+/* radyo basliginin ilk harfi kirpilmasin */
+html.v2 .mp-label {
+  letter-spacing: .12em !important;
+  padding-left: 2px !important;
+  overflow: visible !important;
+  text-indent: 0 !important;
+}
+html.v2 .mp-head-row { overflow: visible !important; }
+
+/* mobil: altta orijinal bottom-nav var (76px) -> tema secicinin ustune binmesin */
+@media (max-width: 900px) {
+  #v2Switch {
+    right: 10px; bottom: 88px;
+    padding: 5px 6px 5px 9px;
+    gap: 4px;
+  }
+  #v2Switch .v2-sw-label { display: none; }
+  #v2Switch .v2-sw-btn { padding: 5px 9px; font-size: 9.5px; }
+}
